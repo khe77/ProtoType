@@ -33,7 +33,7 @@ public class LoginActivity extends AppCompatActivity {
         EditText userIdText = (EditText)findViewById(R.id.user_id);
         EditText passwordText = (EditText)findViewById(R.id.password);
         new Login().execute(
-                "http://172.16.1.248:52273/user/login",
+                "http://172.16.2.5:52273/user/login",
                 userIdText.getText().toString(),
                 passwordText.getText().toString());
     }

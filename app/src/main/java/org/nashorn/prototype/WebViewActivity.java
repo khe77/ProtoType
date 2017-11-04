@@ -1,14 +1,18 @@
 package org.nashorn.prototype;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -43,6 +47,7 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Iterator;
+
 
 public class WebViewActivity extends AppCompatActivity {
     private static final String HOME_URL = "http://172.16.2.5:9000/#!/";
@@ -109,7 +114,7 @@ public class WebViewActivity extends AppCompatActivity {
                         TextView idText = (TextView)loginView.findViewById(R.id.user_id);
                         TextView passwordText = (TextView)loginView.findViewById(R.id.user_password);
                         Toast.makeText(WebViewActivity.this, idText.getText()+"/"+
-                            passwordText.getText(), Toast.LENGTH_LONG).show();
+                                passwordText.getText(), Toast.LENGTH_LONG).show();
                         new LoadUserList().execute(
                                 "http://172.16.2.5:52273/user/login",
                                 idText.getText().toString(),
@@ -153,10 +158,23 @@ public class WebViewActivity extends AppCompatActivity {
 
         //교재 p707~p713 Firebase 설정 적용
         //Registration ID
-        String regId = FirebaseInstanceId.getInstance().getToken();
-        Log.i("regId", regId);
-        new Nologin().execute(
-                "http://172.16.2.5:52273/user/nologin", regId);
+        try {
+            String regId = FirebaseInstanceId.getInstance().getToken();
+            Log.i("regId", regId);
+            new Nologin().execute(
+                    "http://172.16.2.5:52273/user/nologin", regId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //외장 메모리 접근 권한 요청
+        int permissionCheck = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE);
+        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[] {Manifest.permission.READ_EXTERNAL_STORAGE},
+                    1);
+        }
     }
     //로그아웃
     public void logout(View view) {
@@ -185,7 +203,7 @@ public class WebViewActivity extends AppCompatActivity {
                     Log.i("mCurrentPhotoPath", mCurrentPhotoPath);
                     Uri mImageCaptureUri = data.getData();
                     new ImageUpload().execute(
-                            "http://172.16.1.248:52273/user/picture",
+                            "http://172.16.2.5:52273/user/picture",
                             mCurrentPhotoPath, "DESCRIPTION");
                 }
                 break;
