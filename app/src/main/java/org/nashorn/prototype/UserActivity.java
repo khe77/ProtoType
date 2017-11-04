@@ -23,7 +23,7 @@ public class UserActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
-        new LoadUserList().execute("http://172.16.2.5:52273/user");
+        new LoadUserList().execute("http://172.16.1.248:52273/user");
     }
 
     public void addUser(View view) {

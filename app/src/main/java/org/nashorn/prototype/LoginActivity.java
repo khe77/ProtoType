@@ -37,7 +37,6 @@ public class LoginActivity extends AppCompatActivity {
                 userIdText.getText().toString(),
                 passwordText.getText().toString());
     }
-    //https://www.studytutorial.in/android-httpurlconnection-post-and-get-request-tutorial
     class Login extends AsyncTask<String,String,String> {
         ProgressDialog dialog = new ProgressDialog(LoginActivity.this);
         @Override
