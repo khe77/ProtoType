@@ -50,9 +50,9 @@ import java.util.Iterator;
 
 
 public class WebViewActivity extends AppCompatActivity {
-    private static final String HOME_URL = "http://172.16.2.5:9000/#!/";
-    private static final String SIGNUP_URL = "http://172.16.2.5:9000/#!/signup";
-    private static final String USERLIST_URL = "http://172.16.2.5:9000/#!/user/list";
+    private static final String HOME_URL = "http://10.0.2.2:9000/#!/";
+    private static final String SIGNUP_URL = "http://10.0.2.2:9000/#!/signup";
+    private static final String USERLIST_URL = "http://10.0.2.2:9000/#!/user/list";
     private WebView webView = null;
 
     private static final int REQUEST_IMAGE_CAMERA = 11;
@@ -114,9 +114,9 @@ public class WebViewActivity extends AppCompatActivity {
                         TextView idText = (TextView)loginView.findViewById(R.id.user_id);
                         TextView passwordText = (TextView)loginView.findViewById(R.id.user_password);
                         Toast.makeText(WebViewActivity.this, idText.getText()+"/"+
-                                passwordText.getText(), Toast.LENGTH_LONG).show();
+                            passwordText.getText(), Toast.LENGTH_LONG).show();
                         new LoadUserList().execute(
-                                "http://172.16.2.5:52273/user/login",
+                                "http://172.16.1.248:52273/user/login",
                                 idText.getText().toString(),
                                 passwordText.getText().toString());
 
@@ -162,7 +162,7 @@ public class WebViewActivity extends AppCompatActivity {
             String regId = FirebaseInstanceId.getInstance().getToken();
             Log.i("regId", regId);
             new Nologin().execute(
-                    "http://172.16.2.5:52273/user/nologin", regId);
+                    "http://172.16.1.248:52273/user/nologin", regId);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -190,6 +190,11 @@ public class WebViewActivity extends AppCompatActivity {
                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(intent, REQUEST_IMAGE_ALBUM);
     }
+    public void goRecyclerView(View view) {
+        Intent intent = new Intent(WebViewActivity.this,
+                RecyclerViewActivity.class);
+        startActivity(intent);
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -203,7 +208,7 @@ public class WebViewActivity extends AppCompatActivity {
                     Log.i("mCurrentPhotoPath", mCurrentPhotoPath);
                     Uri mImageCaptureUri = data.getData();
                     new ImageUpload().execute(
-                            "http://172.16.2.5:52273/user/picture",
+                            "http://172.16.1.248:52273/user/picture",
                             mCurrentPhotoPath, "DESCRIPTION");
                 }
                 break;
